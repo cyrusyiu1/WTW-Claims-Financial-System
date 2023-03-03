@@ -132,8 +132,9 @@ const permit = new Bearer({
 
       postPolicy  = async (req: Request, res: Response)=>{
         try {
-            const { policyNumber, policyType, policyTerm, coverageAmount, premium} = req.body;
-            const user: any = await this.userService.postPolicy(policyNumber, policyType, policyTerm, coverageAmount, premium);
+            const userId = req.user?.id
+            const { policyNumber, policyType, policyTerm, coverageAmount, premium, claims} = req.body;
+            const user: any = await this.userService.postPolicy(userId,policyNumber, policyType, policyTerm, coverageAmount, premium,claims);
             res.json(user)
         }catch(error){
             res.status(500).json({ message: error });

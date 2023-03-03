@@ -45,14 +45,23 @@ export class UserService {
     return user
   }
 
-  async postPolicy(policyNumber:string, policyType:string, policyTerm:string, coverageAmount:string, premium:string){
-    const user = await this.knex("policy").insert({"policy_number" : policyNumber,"policy_type":policyType,"policy_term":policyTerm,"coverage_amount":coverageAmount,"premium":premium});
+  async postPolicy(userId:number | undefined,policyNumber:string, policyType:string, policyTerm:string, coverageAmount:string, premium:string, claims:string){
+    const user = await this.knex("policy").insert({"user_id":userId,"policy_number" : policyNumber,"policy_type":policyType,"policy_term":policyTerm,"coverage_amount":coverageAmount,"premium":premium});
     return user
   }
 
+  // async getAllPolicy(){
+  //   const user = await this.knex("policy").orderBy('id')
+  //   return user
+  // }
+
   async getAllPolicy(){
-    const user = await this.knex("policy").orderBy('id')
-    return user
+    const result = await this.knex.raw(`
+      select policy.*,users.username 
+      from policy left join users on user_id = users.id
+      order by id;
+    `);
+    return result.rows;
   }
 
   async editPolicy(policyId:string,policyNumber:string,policyType:string, policyTerm:string, coverageAmount:string, premium:string){

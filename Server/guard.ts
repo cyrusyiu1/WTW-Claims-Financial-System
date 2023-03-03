@@ -14,6 +14,7 @@ export async function isLoggedIn(
   next: express.NextFunction
   ) {
   try {
+    console.log(req)
     const token = permit.check(req);
     console.log(token)
     if (!token) {

@@ -74,7 +74,7 @@ export default function Login() {
                 <button type="submit" onClick={submitButton}>Login</button> 
             </form>
             :
-            <button onClick={logoutButton}>Logout</button>
+            <button type="submit" onClick={logoutButton}>Logout</button>
           }
         </div>
     </div>

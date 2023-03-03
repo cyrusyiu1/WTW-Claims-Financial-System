@@ -99,6 +99,7 @@ export default function PolicyList() {
             <div key={policy.id}>
                     <div style={{border:'solid 2px',marginLeft:'5px',marginRight:'2px',marginBottom:'5px',padding:'10px'}}>
                         <div style={{textAlign:"left",marginBottom:'5px'}}>
+                            <div>Username: {policy.username}</div>
                             <div>Policy number: {policy.policy_number}</div>
                             <div>Policy type: {policy.policy_type}</div>
                             <div>PolicyTerm: {policy.policy_term}</div>
