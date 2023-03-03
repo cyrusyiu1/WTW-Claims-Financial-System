@@ -96,15 +96,15 @@ const permit = new Bearer({
         }
       }
 
-      getUserById = async(req:Request, res: Response) => {
-        try {
-            const user: any = await this.userService.getUsernameById(req.params.id);
-            res.json(user)
-        }catch(error){
-            res.status(500).json({ message: error });
-            return;
-        }
-      }
+      // getUserById = async(req:Request, res: Response) => {
+      //   try {
+      //       const user: any = await this.userService.getUsernameById(req.params.id);
+      //       res.json(user)
+      //   }catch(error){
+      //       res.status(500).json({ message: error });
+      //       return;
+      //   }
+      // }
 
       permissions = async (req: Request, res: Response) => {
         try {
@@ -133,7 +133,13 @@ const permit = new Bearer({
       postPolicy  = async (req: Request, res: Response)=>{
         try {
             const userId = req.user?.id
-            const { policyNumber, policyType, policyTerm, coverageAmount, premium, claims} = req.body;
+            const { policyNumber, policyType, policyTerm, coverageAmount, premium, claims, authorityLevel} = req.body;
+            if (authorityLevel === 1 && claims >= 250000){
+              return
+            }
+            if (authorityLevel === 2 && claims >= 1000000){
+              return
+            }
             const user: any = await this.userService.postPolicy(userId,policyNumber, policyType, policyTerm, coverageAmount, premium,claims);
             res.json(user)
         }catch(error){
@@ -177,5 +183,16 @@ const permit = new Bearer({
             res.status(500).json({ message: error });
             return;
         }
+      }
+
+      getUserById = async (req: Request, res: Response) => {
+        try {
+          const userId = req.user?.id
+          const user: any = await this.userService.getUserById(userId);
+          res.json(user)
+      }catch(error){
+          res.status(500).json({ message: error });
+          return;
+      }
       }
 }

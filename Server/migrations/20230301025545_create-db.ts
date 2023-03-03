@@ -33,6 +33,7 @@ export async function up(knex: Knex): Promise<void> {
         table.date("start_date");
         table.boolean("email_notification");
         table.boolean("fund_management");
+        table.decimal("claims_amount",10,2)
         table.integer("user_id").unsigned();
         table.foreign("user_id").references("users.id");
       });
@@ -53,12 +54,12 @@ export async function up(knex: Knex): Promise<void> {
         table.foreign("policy_id").references("policy.id");
       });
 
-      await knex.schema.createTable("claims", (table) => {
-        table.increments();
-        table.decimal("amount",10,2);
-        table.integer("policy_id").unsigned();
-        table.foreign("policy_id").references("policy.id");
-      });
+      // await knex.schema.createTable("claims", (table) => {
+      //   table.increments();
+      //   table.decimal("amount",10,2);
+      //   table.integer("policy_id").unsigned();
+      //   table.foreign("policy_id").references("policy.id");
+      // });
 
       await knex.schema.createTable("transaction", (table) => {
         table.increments();
@@ -72,7 +73,7 @@ export async function up(knex: Knex): Promise<void> {
 
 export async function down(knex: Knex): Promise<void> {
   await knex.schema.dropTableIfExists("transaction");
-  await knex.schema.dropTableIfExists("claims");
+  // await knex.schema.dropTableIfExists("claims");
   await knex.schema.dropTableIfExists("insurer");
   await knex.schema.dropTableIfExists("policy_holder");
   await knex.schema.dropTableIfExists("policy");

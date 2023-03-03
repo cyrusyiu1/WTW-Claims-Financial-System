@@ -46,7 +46,9 @@ export class UserService {
   }
 
   async postPolicy(userId:number | undefined,policyNumber:string, policyType:string, policyTerm:string, coverageAmount:string, premium:string, claims:string){
-    const user = await this.knex("policy").insert({"user_id":userId,"policy_number" : policyNumber,"policy_type":policyType,"policy_term":policyTerm,"coverage_amount":coverageAmount,"premium":premium});
+    console.log(userId,policyNumber, policyType, policyTerm, coverageAmount, premium, claims)
+    const user = await this.knex("policy").insert({"user_id":userId,"policy_number" : policyNumber,"policy_type":policyType,"policy_term":policyTerm,"coverage_amount":coverageAmount,"premium":premium,"claims_amount":claims});
+    console.log(user)
     return user
   }
 
@@ -71,5 +73,12 @@ export class UserService {
 
   async deletePolicy(policyId:string){
     await this.knex("policy").where("id",policyId).del()
+  }
+
+  async getUserById(userId : number | undefined){
+    const user = await this.knex("users")
+    .where({ id: userId })
+    .first();
+  return user;
   }
 }

@@ -105,6 +105,7 @@ export default function PolicyList() {
                             <div>PolicyTerm: {policy.policy_term}</div>
                             <div>Coverage amount: {policy.coverage_amount}</div>
                             <div>Premium: {policy.premium}</div>
+                            <div>Claims Amount: {policy.claims_amount}</div>
                         </div>
                         <div>
                         <button onClick={() => editPolicy(policy.id,index)}>Edit</button>
