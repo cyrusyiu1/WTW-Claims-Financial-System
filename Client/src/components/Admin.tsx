@@ -128,9 +128,10 @@ export default function Admin() {
     },[authorityIndex])
 
   return (
-    <div style={{marginLeft:'20%'}}>
+    <div style={{marginLeft:'22.5%',marginTop:'2em'}}>
         <h1>Admin Panel</h1>
         {/* <button onClick={allUsersInfoApi}>check</button> */}
+        <div style={{textAlign:'left',lineHeight:'3em',marginLeft:'6em'}}>
         <form action="" onSubmit={submitPermissionsChange}>
           <span>Username: </span>
             <select name="" id="" onChange={(e)=>handleSelectUser(parseInt(e.currentTarget.value))}>
@@ -142,7 +143,6 @@ export default function Admin() {
             <input type="text" value={permissionsLevel} onChange={(e)=> changePermissionsLevel(e)}/>
             <input type="submit"/>
         </form>
-
         <form action="" onSubmit={submitAuthorityChange}>
           <span>Username: </span>
             <select name="" id="" onChange={(e)=>handleSelectAuthorityUser(parseInt(e.currentTarget.value))}>
@@ -154,6 +154,8 @@ export default function Admin() {
             <input type="text" value={authorityLevel} onChange={(e)=> changeAuthorityLevel(e)}/>
             <input type="submit"/>
         </form>
+        </div>
     </div>
   )
 }
+

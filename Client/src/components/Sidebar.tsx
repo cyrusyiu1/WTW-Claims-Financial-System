@@ -10,12 +10,12 @@ export default function Sidebar() {
       </div>
       <div className={style.menu}>
         <ul>
-            <li><Link to={"/"}>Home</Link></li>
+            {/* <li><Link to={"/"}>Home</Link></li> */}
             <li><Link to={"Register"}>Register</Link></li>
             <li><Link to={"Login"}>Login</Link></li>
             <li><Link to={"Admin"}>Admin</Link></li>
-            <li><Link to={"Policy"}>Policy</Link></li>
-            {/* <li><Link to={"PolicyList"}>PolicyList</Link></li> */}
+            <li><Link to={"Policy"}>Create Policy</Link></li>
+            <li><Link to={"PolicyList"}>Policy List</Link></li>
         </ul>
       </div>
     </div>

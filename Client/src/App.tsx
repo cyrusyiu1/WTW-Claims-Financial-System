@@ -13,6 +13,7 @@ import LoginPage from './pages/LoginPage';
 import AdminPage from './pages/AdminPage';
 import PolicyPage from './pages/PolicyPage';
 import RegisterPage from './pages/RegisterPage';
+import PolicyListPage from './pages/PolicyListPage';
 
 function App() {
   
@@ -22,12 +23,12 @@ function App() {
       <div className="App">
         <Switch>
           {/* <Home></Home> */}
-          <Route path="/" exact={true} component={Home} />
+          <Route path="/" exact={true} component={LoginPage} />
           <Route path="/register" component={RegisterPage} />
           <Route path="/login" component={LoginPage} />
           <Route path="/admin" component={AdminPage} />
           <Route path="/policy" component={PolicyPage} />
-          {/* <Route path="/policyList" component={PolicyList} /> */}
+          <Route path="/policyList" component={PolicyListPage} />
         </Switch>
       </div>
       </ConnectedRouter>

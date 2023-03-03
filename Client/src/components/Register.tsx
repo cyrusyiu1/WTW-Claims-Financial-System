@@ -51,7 +51,7 @@ export default function Register() {
     },[])
 
   return (
-  <div style={{marginLeft:'20%'}}>
+  <div style={{marginLeft:'22.5%',marginTop:'2em'}}>
     <h1 className="">Register</h1>
     <form className="block">
         <label> Username: </label>

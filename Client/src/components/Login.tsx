@@ -56,7 +56,7 @@ export default function Login() {
     }
 
   return (
-    <div style={{marginLeft:'20%'}}>
+    <div style={{marginLeft:'22.5%',marginTop:'2em'}}>
         <h1>Login</h1>
         {!isAuthenticated?
                 <form className="block">

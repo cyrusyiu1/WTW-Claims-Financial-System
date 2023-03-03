@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { env } from "../env";
 
-export default function PolicyList(props:any) {
+export default function PolicyList() {
     const [policyId,setPolicyId] = useState('')
     const [editMode,setEditMode] = useState(false) 
     const [policyNumber, setPolicyNumber] = useState("");
@@ -11,22 +11,29 @@ export default function PolicyList(props:any) {
     const [premium, setPremium] = useState('');
     const [index, setIndex] = useState('0')
     const [random, setRandom] = useState(0)
+    const [allPolicy,setAllPolicy] = useState([{id:'',policy_number:'',policy_type:'',policy_term:'',coverage_amount:'',premium:''}])
 
     const api_server = env.apiOrigin;
 
     useEffect(()=>{
-        props.getAllPolicyApi()
+        getAllPolicyApi()
     },[])
 
     useEffect(()=>{
-        setPolicyNumber(props.allPolicy[parseInt(index)].policy_number)
-        setPolicyType(props.allPolicy[parseInt(index)].policy_type)
-        setPolicyTerm(props.allPolicy[parseInt(index)].policy_term)
-        setCoverageAmount(props.allPolicy[parseInt(index)].coverage_amount)
-        setPremium(props.allPolicy[parseInt(index)].premium)
-        console.log('123',props.allPolicy)
+        setPolicyNumber(allPolicy[parseInt(index)].policy_number)
+        setPolicyType(allPolicy[parseInt(index)].policy_type)
+        setPolicyTerm(allPolicy[parseInt(index)].policy_term)
+        setCoverageAmount(allPolicy[parseInt(index)].coverage_amount)
+        setPremium(allPolicy[parseInt(index)].premium)
+        console.log('123',allPolicy)
         console.log(index)
     },[random])
+
+    const getAllPolicyApi = async () => {
+      const res = await fetch(`${api_server}/users/getAllPolicy`)
+      const result = await res.json()
+      setAllPolicy(result)
+  }
 
     const editPostApi = async (policyId:string) => {
         const res = await fetch(`${api_server}/users/editPolicy`,{
@@ -45,7 +52,7 @@ export default function PolicyList(props:any) {
           }),
         });
         if(res.status === 200){
-            props.getAllPolicyApi()
+            getAllPolicyApi()
         }
       }
 
@@ -61,7 +68,7 @@ export default function PolicyList(props:any) {
           }),
         });
         if(res.status === 200){
-            props.getAllPolicyApi()
+            getAllPolicyApi()
         }
       }
 
@@ -84,11 +91,11 @@ export default function PolicyList(props:any) {
     }
 
   return (
-    <>
-    <h3>Policy List</h3>
-    <div style={{display:'flex',flexFlow:'wrap',marginLeft:'4%'}}>
+    <div style={{marginLeft:'25%',marginRight:'5%'}}>
+    <h1>Policy List</h1>
+    <div style={{flexFlow:'wrap',marginLeft:'4%'}}>
     {!editMode?
-        props.allPolicy.map((policy:any,index:number)=>(
+        allPolicy.map((policy:any,index:number)=>(
             <div key={policy.id}>
                     <div style={{border:'solid 2px',marginLeft:'5px',marginRight:'2px',marginBottom:'5px',padding:'10px'}}>
                         <div style={{textAlign:"left",marginBottom:'5px'}}>
@@ -106,7 +113,7 @@ export default function PolicyList(props:any) {
             </div>
         ))
         :
-        <form onSubmit={handleSave} style={{border:'solid 2px',marginLeft:'2px',marginRight:'2px',marginBottom:'5px',padding:'10px'}}>
+        <form onSubmit={handleSave} style={{display:'flex',flexDirection:'column',border:'solid 2px',marginLeft:'2px',marginRight:'2px',marginBottom:'5px',padding:'10px'}}>
             <label htmlFor="">Policy number:</label>
             <input type="text" onChange={(e)=>setPolicyNumber(e.currentTarget.value)} value={policyNumber}/>
             <label htmlFor="">Policy type:</label>
@@ -123,6 +130,6 @@ export default function PolicyList(props:any) {
         </form> 
         }
     </div>
-    </>
+    </div>
   )
 }

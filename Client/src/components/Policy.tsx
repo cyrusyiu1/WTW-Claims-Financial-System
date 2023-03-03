@@ -48,9 +48,9 @@ export default function Policy() {
 
 
   return (
-    <div style={{marginLeft:'20%'}}>
+    <div style={{marginLeft:'25%',marginRight:'5%'}}>
         <h1>Policy Manangement System</h1>
-        <form onSubmit={handleSubmitPolicy} style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
+        <form onSubmit={handleSubmitPolicy} style={{display:'flex',flexDirection:'column',textAlign:'left',lineHeight:'2em'}}>
             <label> Policy number: </label>
             <input type="text" value={policyNumber} onChange={(e)=>setPolicyNumber(e.currentTarget.value)}/>
             <label> Policy type: </label>
@@ -61,9 +61,10 @@ export default function Policy() {
             <input type="text" value={coverageAmount} onChange={(e)=>{setCoverageAmount(e.currentTarget.value)}}/>
             <label> Premium: </label>
             <input type="text" value={premium} onChange={(e)=>{setPremium(e.currentTarget.value)}}/>
-            <input type="submit" />
+            <div style={{textAlign:'center'}}>
+            <input type="submit"/>
+            </div>
         </form>
-        <PolicyList allPolicy={allPolicy} getAllPolicyApi={getAllPolicyApi}></PolicyList>
     </div>
   )
 }
