@@ -9,6 +9,6 @@ export async function seed(knex: Knex): Promise<void> {
 
     // Inserts seed entries
     await knex("users").insert([
-        { username: "superadmin1", password: password, userType:"superadmin",permissionsLevel:10 },
+        { username: "superadmin1", password: password, userType:"superadmin",permissionsLevel:10,authorityLevel:10 },
     ]);
 };

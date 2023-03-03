@@ -23,7 +23,7 @@ export async function up(knex: Knex): Promise<void> {
 
       await knex.schema.createTable("policy", (table) => {
         table.increments();
-        table.string("policy_number",50).notNullable();
+        table.string("policy_number",50).notNullable().unique();
         table.string("policy_type",50).notNullable();
         table.integer("policy_term")
         table.string("description")

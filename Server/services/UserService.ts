@@ -6,13 +6,14 @@ export class UserService {
   async createUser(username: string, password: string, userType:string) {
     console.log(username,password,userType)
     let permissionsLevel = 1
+    let authorityLevel = 1
     if (userType === "Admin"){
         permissionsLevel = 5
     }else if(userType === "Agent"){
         permissionsLevel = 1
     }
     const user = (
-      await this.knex("users").insert({ username, password, userType, permissionsLevel }).returning("*")
+      await this.knex("users").insert({ username, password, userType, permissionsLevel,authorityLevel }).returning("*")
     )[0];
   }
 
