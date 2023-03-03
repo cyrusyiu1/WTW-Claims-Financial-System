@@ -135,27 +135,34 @@ export default function Admin() {
         <div className={style.container}>
           <div >
             <form className={style.form} action="" onSubmit={submitPermissionsChange}>
-              <span>Username: </span>
+              <span>Username: 
                 <select name="" id="" onChange={(e)=>handleSelectUser(parseInt(e.currentTarget.value))}>
                     {allUser.map((user:any,index)=>(
                         <option value={index} key={user.id} >{user.username}</option>
                     ))}
                 </select>
-                <label htmlFor=""> Permission Level :</label>
-                <input type="text" value={permissionsLevel} onChange={(e)=> changePermissionsLevel(e)}/>
+                </span>
+                <span>
+                  <label htmlFor=""> Permission Level :</label>
+                  <input type="text" value={permissionsLevel} onChange={(e)=> changePermissionsLevel(e)}/>
+                </span>
                 <input type="submit"/>
+                
             </form>
           </div>
           <div >
             <form className={style.form} action="" onSubmit={submitAuthorityChange}>
-              <span>Username: </span>
-                <select name="" id="" onChange={(e)=>handleSelectAuthorityUser(parseInt(e.currentTarget.value))}>
-                    {allUser.map((user:any,index)=>(
-                        <option value={index} key={user.id} >{user.username}</option>
-                    ))}
-                </select>
-                <label htmlFor=""> Authority Level  :</label>
-                <input type="text" value={authorityLevel} onChange={(e)=> changeAuthorityLevel(e)}/>
+              <span>Username: 
+                  <select name="" id="" onChange={(e)=>handleSelectAuthorityUser(parseInt(e.currentTarget.value))}>
+                      {allUser.map((user:any,index)=>(
+                          <option value={index} key={user.id} >{user.username}</option>
+                      ))}
+                  </select>
+                </span>
+                <span>
+                  <label htmlFor=""> Authority Level  :</label>
+                  <input type="text" value={authorityLevel} onChange={(e)=> changeAuthorityLevel(e)}/>
+                </span>
                 <input type="submit"/>
             </form>
           </div>
