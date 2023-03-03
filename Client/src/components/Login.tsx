@@ -59,7 +59,8 @@ export default function Login() {
   return (
     <div className={style.body} style={{marginLeft:'22.5%',marginTop:'2em'}}>
         <div className={style.container}>
-        <h1>Login</h1>
+        {!isAuthenticated ? <h1>Login</h1> : <h1>Logout</h1>
+        }
         {!isAuthenticated?
                 <form  style={{lineHeight:'3em'}}>
                   <div>

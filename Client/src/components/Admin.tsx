@@ -147,7 +147,6 @@ export default function Admin() {
                   <input type="text" value={permissionsLevel} onChange={(e)=> changePermissionsLevel(e)}/>
                 </span>
                 <input type="submit"/>
-                
             </form>
           </div>
           <div >
