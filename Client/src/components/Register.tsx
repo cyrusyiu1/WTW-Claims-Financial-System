@@ -1,5 +1,6 @@
 import React, { FormEvent, useContext, useEffect, useState } from 'react'
 import { env } from "../env";
+import style from '../style/register.module.css'
 
 export default function Register() {
     const [username, setUsername] = useState("");
@@ -51,20 +52,33 @@ export default function Register() {
     },[])
 
   return (
-  <div style={{marginLeft:'22.5%',marginTop:'2em'}}>
+  <div className={style.body} style={{marginLeft:'22.5%',marginTop:'2em'}}>
+    <div className={style.container}>
     <h1 className="">Register</h1>
-    <form className="block">
-        <label> Username: </label>
-        <input type="text" className="border-2 block text-center" value={username} onChange={(e) => setUsername(e.currentTarget.value)}></input>
-        <label> Password: </label>
-        <input type="text" className="border-2 block text-center" value={password} onChange={(e) => setPassword(e.currentTarget.value)}></input>
-        <label htmlFor="">Usertype: </label>
-        <select value={usertype} onChange={(e)=> setUsertype(e.currentTarget.value)} name="" id="">
-          <option value="Agent">Agent</option>
-          <option value="Admin">Admin</option>
-        </select>
-        <input type="submit" onClick={submitButton}/> 
-    </form>
+      <form className="block" style={{lineHeight:'3em'}}>
+          <div>
+            <label> Username : </label>
+            <input type="text" className="border-2 block text-center" value={username} onChange={(e) => setUsername(e.currentTarget.value)}></input>
+          </div>
+          <div>
+            <label> Password : </label>
+            <input type="text" className="border-2 block text-center" value={password} onChange={(e) => setPassword(e.currentTarget.value)}></input>
+          </div>
+          <div>
+            <label htmlFor=""> User type : </label>
+            <select value={usertype} onChange={(e)=> setUsertype(e.currentTarget.value)} name="" id="">
+              <option value="Admin">Admin</option>
+              <option value="Agent">Agent</option>
+              <option value="Admin">Claims</option>
+              <option value="Admin">Finance</option>
+              <option value="Admin">Read Only</option>
+            </select>
+          </div>
+          
+            <button type="submit" onClick={submitButton}>Register</button> 
+  
+      </form>
+    </div>
     </div>
   )
 }

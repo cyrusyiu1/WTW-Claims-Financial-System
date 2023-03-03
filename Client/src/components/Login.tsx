@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { env } from "../env";
 import { loginSuccess, logoutAction } from '../redux/auth/action';
 import { IRootState } from '../redux/state';
+import style from '../style/login.module.css'
 
 export default function Login() {
     const [username, setUsername] = useState("");
@@ -56,21 +57,25 @@ export default function Login() {
     }
 
   return (
-    <div style={{marginLeft:'22.5%',marginTop:'2em'}}>
+    <div className={style.body} style={{marginLeft:'22.5%',marginTop:'2em'}}>
+        <div className={style.container}>
         <h1>Login</h1>
         {!isAuthenticated?
-                <form className="block">
-                <label>Username:</label>
-                <input type="text" className="border-2 block text-center" value={username} onChange={(e) => setUsername(e.currentTarget.value)}></input>
-                <label>Password:</label>
-                <input type="text" className="border-2 block text-center" value={password} onChange={(e) => setPassword(e.currentTarget.value)}></input>
-                <input type="submit" onClick={submitButton}/> 
+                <form  style={{lineHeight:'3em'}}>
+                  <div>
+                    <label>Username : </label>
+                    <input type="text" className="border-2 block text-center" value={username} onChange={(e) => setUsername(e.currentTarget.value)}></input>
+                  </div>
+                  <div>
+                    <label>Password : </label>
+                    <input type="text" className="border-2 block text-center" value={password} onChange={(e) => setPassword(e.currentTarget.value)}></input>
+                  </div>
+                <button type="submit" onClick={submitButton}>Login</button> 
             </form>
             :
             <button onClick={logoutButton}>Logout</button>
-            }
-
-        
+          }
+        </div>
     </div>
   )
 }
