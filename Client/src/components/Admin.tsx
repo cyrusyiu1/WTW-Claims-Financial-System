@@ -1,5 +1,6 @@
 import React, { ReactElement, useEffect, useState } from 'react'
 import { env } from "../env";
+import style from '../style/admin.module.css'
 
 
 export default function Admin() {
@@ -131,29 +132,33 @@ export default function Admin() {
     <div style={{marginLeft:'22.5%',marginTop:'2em'}}>
         <h1>Admin Panel</h1>
         {/* <button onClick={allUsersInfoApi}>check</button> */}
-        <div style={{textAlign:'left',lineHeight:'3em',marginLeft:'6em'}}>
-        <form action="" onSubmit={submitPermissionsChange}>
-          <span>Username: </span>
-            <select name="" id="" onChange={(e)=>handleSelectUser(parseInt(e.currentTarget.value))}>
-                {allUser.map((user:any,index)=>(
-                    <option value={index} key={user.id} >{user.username}</option>
-                ))}
-            </select>
-            <label htmlFor=""> Permission Level :</label>
-            <input type="text" value={permissionsLevel} onChange={(e)=> changePermissionsLevel(e)}/>
-            <input type="submit"/>
-        </form>
-        <form action="" onSubmit={submitAuthorityChange}>
-          <span>Username: </span>
-            <select name="" id="" onChange={(e)=>handleSelectAuthorityUser(parseInt(e.currentTarget.value))}>
-                {allUser.map((user:any,index)=>(
-                    <option value={index} key={user.id} >{user.username}</option>
-                ))}
-            </select>
-            <label htmlFor=""> Authority Level  :</label>
-            <input type="text" value={authorityLevel} onChange={(e)=> changeAuthorityLevel(e)}/>
-            <input type="submit"/>
-        </form>
+        <div className={style.container}>
+          <div >
+            <form className={style.form} action="" onSubmit={submitPermissionsChange}>
+              <span>Username: </span>
+                <select name="" id="" onChange={(e)=>handleSelectUser(parseInt(e.currentTarget.value))}>
+                    {allUser.map((user:any,index)=>(
+                        <option value={index} key={user.id} >{user.username}</option>
+                    ))}
+                </select>
+                <label htmlFor=""> Permission Level :</label>
+                <input type="text" value={permissionsLevel} onChange={(e)=> changePermissionsLevel(e)}/>
+                <input type="submit"/>
+            </form>
+          </div>
+          <div >
+            <form className={style.form} action="" onSubmit={submitAuthorityChange}>
+              <span>Username: </span>
+                <select name="" id="" onChange={(e)=>handleSelectAuthorityUser(parseInt(e.currentTarget.value))}>
+                    {allUser.map((user:any,index)=>(
+                        <option value={index} key={user.id} >{user.username}</option>
+                    ))}
+                </select>
+                <label htmlFor=""> Authority Level  :</label>
+                <input type="text" value={authorityLevel} onChange={(e)=> changeAuthorityLevel(e)}/>
+                <input type="submit"/>
+            </form>
+          </div>
         </div>
     </div>
   )
