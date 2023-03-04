@@ -6,6 +6,7 @@ export default function Register() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [usertype, setUsertype] = useState("")
+    const [registerResult,setRegisterResult] = useState({type:"",message:""})
 
     const api_server = env.apiOrigin;
 
@@ -45,11 +46,14 @@ export default function Register() {
         localStorage.setItem('token', result)
       }else{
         console.log(result.message)
+        setRegisterResult({type:'fail',message:'Login Fail'})
       }
     }
 
-    useEffect(()=>{
-    },[])
+    const resultMessage = 
+    <div style={registerResult.type === "fail"?{color:'red'}:{color:'black'}}>
+      {registerResult.message}
+    </div>
 
   return (
   <div className={style.body} style={{marginLeft:'22.5%',marginTop:'2em'}}>
@@ -76,7 +80,7 @@ export default function Register() {
           </div>
           
             <button type="submit" onClick={submitButton}>Register</button> 
-  
+            <div>{resultMessage}</div>
       </form>
     </div>
     </div>

@@ -8,6 +8,8 @@ import style from '../style/login.module.css'
 export default function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [loginResult,setLoginResult] = useState({type:"",message:""})
+
     const dispatch = useDispatch()
 
     const isAuthenticated = useSelector(
@@ -32,8 +34,11 @@ export default function Login() {
         const result = await res.json()
         if(res.status === 200){
           localStorage.setItem('token', result)
+          // setLoginResult({type:'success',message:'Login Success'})
+          dispatch(loginSuccess())
         }else{
             console.log(result.message)
+            setLoginResult({type:'fail',message:'Login Fail'})
         }
       }
 
@@ -44,9 +49,9 @@ export default function Login() {
         username: username,
         password: password,
       };
-      console.log(username,password)
+      // console.log(username,password)
       loginApi()
-      dispatch(loginSuccess())
+      // dispatch(loginSuccess())
       // console.log(isAuthenticated)
     };
 
@@ -55,6 +60,11 @@ export default function Login() {
       localStorage.removeItem('token');
       dispatch(logoutAction())
     }
+
+    const resultMessage = 
+      <div style={loginResult.type === "fail"?{color:'red'}:{color:'black'}}>
+        {loginResult.message}
+      </div>
 
   return (
     <div className={style.body} style={{marginLeft:'22.5%',marginTop:'2em'}}>
@@ -72,6 +82,7 @@ export default function Login() {
                     <input type="text" className="border-2 block text-center" value={password} onChange={(e) => setPassword(e.currentTarget.value)}></input>
                   </div>
                 <button type="submit" onClick={submitButton}>Login</button> 
+                <div>{resultMessage}</div>
             </form>
             :
             <button type="submit" onClick={logoutButton}>Logout</button>
