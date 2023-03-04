@@ -76,13 +76,17 @@ export default function Admin() {
           }
     }
 
-    const changeAuthorityLevel =(event:any) => {
-      const newValue = Number(event.target.value);
-      if (isNaN(newValue) || event.target.value === '') {
-          setAuthorityLevel(0);
-        } else {
-          setAuthorityLevel(newValue);
-        }
+    // const changeAuthorityLevel =(event:any) => {
+    //   const newValue = Number(event.target.value);
+    //   if (isNaN(newValue) || event.target.value === '') {
+    //       setAuthorityLevel(0);
+    //     } else {
+    //       setAuthorityLevel(newValue);
+    //     }
+    // }
+
+    const changeAuthorityLevel = (event:any) => {
+      setAuthorityLevel(event.currentTarget.value)
     }
 
     const handleSelectUser = (index:number) => {
@@ -158,9 +162,14 @@ export default function Admin() {
                       ))}
                   </select>
                 </span>
-                <span>
+                <span style={{width:'18em'}}>
                   <label htmlFor=""> Authority Level  :</label>
-                  <input type="text" value={authorityLevel} onChange={(e)=> changeAuthorityLevel(e)}/>
+                  <select style={{width:'55%'}} value={authorityLevel} onChange={((e:any) => setAuthorityLevel(e.currentTarget.value))}>
+                    <option value='1'>1</option>
+                    <option value='2'>2</option>
+                    <option value='3'>3</option>
+                  </select>
+                  {/* <input type="text" value={authorityLevel} onChange={(e)=> changeAuthorityLevel(e)}/> */}
                 </span>
                 <input type="submit"/>
             </form>
