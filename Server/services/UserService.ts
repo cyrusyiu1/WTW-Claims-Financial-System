@@ -66,8 +66,8 @@ export class UserService {
     return result.rows;
   }
 
-  async editPolicy(policyId:string,policyNumber:string,policyType:string, policyTerm:string, coverageAmount:string, premium:string){
-    const user = await this.knex("policy").update({"policy_number" : policyNumber,"policy_type":policyType,"policy_term":policyTerm,"coverage_amount":coverageAmount,"premium":premium}).where({ "id" : policyId});
+  async editPolicy(policyId:string,policyNumber:string,policyType:string, policyTerm:string, coverageAmount:string, premium:string, claims:string){
+    const user = await this.knex("policy").update({"policy_number" : policyNumber,"policy_type":policyType,"policy_term":policyTerm,"coverage_amount":coverageAmount,"premium":premium,"claims_amount":claims}).where({ "id" : policyId});
     return user
   }
 

@@ -165,8 +165,10 @@ const permit = new Bearer({
                 policyType,
                 policyTerm,
                 coverageAmount,
-                premium} = req.body
-            const user: any = await this.userService.editPolicy(policyId,policyNumber,policyType,policyTerm,coverageAmount,premium);
+                premium,
+                claims,
+              } = req.body
+            const user: any = await this.userService.editPolicy(policyId,policyNumber,policyType,policyTerm,coverageAmount,premium,claims);
             res.json(user)
         }catch(error){
             res.status(500).json({ message: error });
