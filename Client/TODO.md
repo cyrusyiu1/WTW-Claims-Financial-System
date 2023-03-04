@@ -1,6 +1,6 @@
 [x] Fix user admin seed, hard code User Level
 [x] Remove register/admin control page
-[ ] Fix create policy page -> form
+[x] Fix create policy page -> form
 [ ] Add fund management to policy page (transactional)
 [ ] Add claim page
 [ ] Add claim transaction page

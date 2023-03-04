@@ -1,11 +1,15 @@
 import React from 'react'
 import PolicyList from '../components/PolicyList'
-import Sidebar from '../components/Sidebar'
+import { Col, Container, Row } from 'react-bootstrap';
 
 export default function PolicyListPage() {
   return (
-    <>
-      <PolicyList></PolicyList>
-    </>
+    <div className="main-content">
+      <Container fluid>
+        <Row className="justify-content-center">
+          <PolicyList></PolicyList>
+        </Row>
+      </Container>
+    </div>
   )
 }

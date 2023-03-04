@@ -146,63 +146,6 @@ const permit = new Bearer({
         }
       }
 
-      postPolicy  = async (req: Request, res: Response)=>{
-        try {
-            const userId = req.user?.id
-            const { policyNumber, policyType, policyTerm, coverageAmount, premium, claims, authorityLevel} = req.body;
-            if (authorityLevel === 1 && claims >= 250000){
-              return
-            }
-            if (authorityLevel === 2 && claims >= 1000000){
-              return
-            }
-            const user: any = await this.userService.postPolicy(userId,policyNumber, policyType, policyTerm, coverageAmount, premium,claims);
-            res.json(user)
-        }catch(error){
-            res.status(500).json({ message: error });
-            return;
-        }
-      }
-
-      getAllPolicy = async (req: Request, res: Response) => {
-        try {
-            const user: any = await this.userService.getAllPolicy();
-            res.json(user)
-        }catch(error){
-            res.status(500).json({ message: error });
-            return;
-        }
-      }
-
-      editPolicy = async (req: Request, res: Response) => {
-        try {
-            const {policyId,
-                policyNumber,
-                policyType,
-                policyTerm,
-                coverageAmount,
-                premium,
-                claims,
-              } = req.body
-            const user: any = await this.userService.editPolicy(policyId,policyNumber,policyType,policyTerm,coverageAmount,premium,claims);
-            res.json(user)
-        }catch(error){
-            res.status(500).json({ message: error });
-            return;
-        }
-      }
-
-      deletePolicy = async (req: Request, res: Response) => {
-        try {
-            const policyId = req.body.policyId
-            const user: any = await this.userService.deletePolicy(policyId);
-            res.json(user)
-        }catch(error){
-            res.status(500).json({ message: error });
-            return;
-        }
-      }
-
       getUserById = async (req: Request, res: Response) => {
         try {
           const userId = req.user?.id

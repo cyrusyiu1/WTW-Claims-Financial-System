@@ -27,8 +27,8 @@ function App() {
             <Route path="/" exact={true} component={Home} />
             <Route path="/register" component={RegisterPage} />
             <Route path="/admin" component={AdminPage} />
-            <Route path="/policy" component={PolicyListPage} />
             <Route path="/policy/new" component={PolicyPage} />
+            <Route path="/policy" component={PolicyListPage} />
           </Switch>
         </>
       } {
