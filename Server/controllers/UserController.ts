@@ -18,39 +18,51 @@ const permit = new Bearer({
         try {
           const { username, password, usertype } = req.body;
           const hashedPassword = await hashPassword(password);
-        //   const DbUser: User | undefined = await this.userService.getUserByUsername(
-        //     username
-        //   );
-    
-        //   if (!username || username.length < 3) {
-        //     res.status(401).json({ message: "Wrong username" });
-        //     return;
-        //   }
-        //   if (!password || password.length < 8) {
-        //     res.status(401).json({ message: "Wrong password" });
-        //     return;
-        //   }
+
+          const DbUser: User | undefined = await this.userService.getUserByUsername(
+            username
+          );
+            console.log('Dbuser',DbUser)
+
+          if(!username){
+            res.status(401).json({ message: "Username should not be blank" });
+            return;
+          } 
+          if (!username || username.length < 3) {
+            res.status(401).json({ message: "Username at least 3 words" });
+            return;
+          }
+          if(!password){
+            res.status(401).json({ message: "Password should not be blank" });
+            return;
+          }
+          if (password.length < 8) {
+            res.status(401).json({ message: "Password at least 8 words" });
+            return;
+          }
         //   if (!confirmPassword || confirmPassword != password) {
         //     res.status(401).json({ message: "Wrong confirm password" });
         //     return;
         //   }
-        //   if (username === DbUser) {
-        //     res.status(401).json({ message: "Username is duplicate" });
-        //     return;
-        //   }
+          if(DbUser){
+            if (username === DbUser.username) {
+              res.status(401).json({ message: "Account already registered" });
+              return;
+            }
+          }
+
     
           const user: any = await this.userService.createUser(
             username,
             hashedPassword,
             usertype,
           );
-          // res.json(user);
           if (user) {
             console.log(user);
             const payload = { id: user.id, username: user.username };
             const token = jwtSimple.encode(payload, env.JWT_SECRET);
             res.json(token);
-            console.log(token);
+            console.log('token',token);
             return;
           }
         } catch (error:any) {
@@ -65,16 +77,20 @@ const permit = new Bearer({
           const user: User | undefined = await this.userService.getUserByUsername(
             username
           );
-    
-          if (!user) {
-            res.status(401).json({ message: "Wrong username" });
+          if (!user || !user.username || user && !(await checkPassword(password, user.password))) {
+            res.status(401).json({ message: "Username or passwords incorrect" });
             return;
           }
+          
+          // if (!user || !user.username) {
+          //   res.status(401).json({ message: "Username incorrect" });
+          //   return;
+          // }
     
-          if (user && !(await checkPassword(password, user.password))) {
-            res.status(401).json({ message: "Wrong password" });
-            return;
-          }
+          // if (user && !(await checkPassword(password, user.password))) {
+          //   res.status(401).json({ message: "Password incorrect" });
+          //   return;
+          // }
     
           const payload = { id: user.id, username: user.username };
           const token = jwtSimple.encode(payload, env.JWT_SECRET);

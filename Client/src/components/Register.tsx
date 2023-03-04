@@ -42,11 +42,14 @@ export default function Register() {
       });
       // return res;
       const result = await res.json()
+      console.log('result',result)
       if(res.status === 200){
         localStorage.setItem('token', result)
+        
+        setRegisterResult({type:'success',message:'Register Success'})
       }else{
         console.log(result.message)
-        setRegisterResult({type:'fail',message:'Login Fail'})
+        setRegisterResult({type:'fail',message:result.message})
       }
     }
 
@@ -71,11 +74,11 @@ export default function Register() {
           <div>
             <label htmlFor=""> User type : </label>
             <select value={usertype} onChange={(e)=> setUsertype(e.currentTarget.value)} name="" id="">
-              <option value="Admin">Admin</option>
-              <option value="Agent">Agent</option>
-              <option value="Admin">Claims</option>
-              <option value="Admin">Finance</option>
-              <option value="Admin">Read Only</option>
+              <option value="admin">Admin</option>
+              <option value="agent">Agent</option>
+              <option value="claims">Claims</option>
+              <option value="finance">Finance</option>
+              <option value="read_only">Read Only</option>
             </select>
           </div>
           

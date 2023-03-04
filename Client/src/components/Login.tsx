@@ -34,11 +34,11 @@ export default function Login() {
         const result = await res.json()
         if(res.status === 200){
           localStorage.setItem('token', result)
-          // setLoginResult({type:'success',message:'Login Success'})
+          setLoginResult({type:'success',message:'Login Success'})
           dispatch(loginSuccess())
         }else{
             console.log(result.message)
-            setLoginResult({type:'fail',message:'Login Fail'})
+            setLoginResult({type:'fail',message:result.message})
         }
       }
 

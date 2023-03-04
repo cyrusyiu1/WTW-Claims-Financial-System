@@ -4,7 +4,7 @@ import { Knex } from "knex";
 export class UserService {
   constructor(private knex: Knex) {}
   async createUser(username: string, password: string, userType:string) {
-    console.log(username,password,userType)
+    // console.log(username,password,userType)
     let permissionsLevel = 1
     let authorityLevel = 1
     if (userType === "Admin"){
@@ -15,6 +15,7 @@ export class UserService {
     const user = (
       await this.knex("users").insert({ username, password, userType, permissionsLevel,authorityLevel }).returning("*")
     )[0];
+    return user;
   }
 
   async getUserByUsername(username: string) {
