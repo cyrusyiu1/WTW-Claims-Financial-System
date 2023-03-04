@@ -5,8 +5,7 @@ import Sidebar from '../components/Sidebar'
 export default function PolicyListPage() {
   return (
     <>
-        <Sidebar/>
-        <PolicyList></PolicyList>
+      <PolicyList></PolicyList>
     </>
   )
 }

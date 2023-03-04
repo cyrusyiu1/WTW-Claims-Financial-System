@@ -11,8 +11,8 @@ export default function PolicyList() {
     const [claims,setClaims] = useState('')
     const [premium, setPremium] = useState('');
     const [index, setIndex] = useState('0')
-    const [random, setRandom] = useState(0)
-    const [allPolicy,setAllPolicy] = useState([{id:'',policy_number:'',policy_type:'',policy_term:'',coverage_amount:'',premium:'',claims_amount:''}])
+    const [random, setRandom] = useState(-1)
+    const [allPolicy,setAllPolicy] = useState<{id:'',policy_number:'',policy_type:'',policy_term:'',coverage_amount:'',premium:'',claims_amount:''}[]>([])
 
     const api_server = env.apiOrigin;
 
@@ -21,6 +21,9 @@ export default function PolicyList() {
     },[])
 
     useEffect(()=>{
+      if (random == -1) {
+        return;
+      }
         setPolicyNumber(allPolicy[parseInt(index)].policy_number)
         setPolicyType(allPolicy[parseInt(index)].policy_type)
         setPolicyTerm(allPolicy[parseInt(index)].policy_term)
