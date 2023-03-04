@@ -13,6 +13,7 @@ import PolicyListPage from './pages/PolicyListPage';
 import { useSelector } from 'react-redux';
 import { IRootState } from './redux/state';
 import Sidebar from './components/Sidebar';
+import FundPage from './pages/FundPage';
 
 function App() {
   const isAuthenticated = useSelector(
@@ -27,6 +28,7 @@ function App() {
             <Route path="/" exact={true} component={Home} />
             <Route path="/register" component={RegisterPage} />
             <Route path="/admin" component={AdminPage} />
+            <Route path="/policy/:id/fund" component={FundPage} />
             <Route path="/policy/new" component={PolicyPage} />
             <Route path="/policy" component={PolicyListPage} />
           </Switch>

@@ -53,8 +53,8 @@ export class PolicyController {
         'policy.per_claim_limit2',
         'policy.panel_expense_limit3',
         'policy.per_claim_limit3',
-        'policy_holder.last_name',
-        'insurer.last_name',
+        'policy_holder.last_name AS holder_last_name',
+        'insurer.last_name AS insurer_last_name',
       )
         .from('policy')
         .join('policy_holder', 'policy.id', 'policy_holder.policy_id')
@@ -66,4 +66,72 @@ export class PolicyController {
       return;
     }
   };
+
+  getPolicy = async (req: Request, res: Response) => {
+    try {
+      res.json((await this.knex.select(
+        'policy.id',
+        'policy.policy_number',
+        'policy.description',
+        'policy.start_date',
+        'policy.end_date',
+        'policy.blocked',
+        'policy.panel_expense_limit1',
+        'policy.per_claim_limit1',
+        'policy.panel_expense_limit2',
+        'policy.per_claim_limit2',
+        'policy.panel_expense_limit3',
+        'policy.per_claim_limit3',
+        'policy_holder.last_name AS holder_last_name',
+        'insurer.last_name AS insurer_last_name',
+      )
+        .from('policy')
+        .join('policy_holder', 'policy.id', 'policy_holder.policy_id')
+        .join('insurer', 'policy.id', 'insurer.policy_id')
+        .where('policy.id', req.params.id)
+      )[0]);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: error });
+      return;
+    }
+  };
+
+  addFund = async (req: Request, res: Response) => {
+    try {
+      if (!isNaN(req.body.fund) && req.body.fund > 0) {
+        await this.knex.insert({
+          user_id: req.user?.id,
+          policy_id: req.params.id,
+          amount: req.body.fund
+        }).into('policy_fund')
+      }
+    
+      res.json({'result': 'ok'});
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: error });
+      return;
+    }
+  }
+
+  getPolicyFund = async (req: Request, res: Response) => {
+    try {
+      res.json(await this.knex.select(
+        'policy_fund.id',
+        'policy_fund.amount',
+        'policy_fund.created_at',
+        'users.username AS user ',
+      )
+        .from('policy_fund')
+        .join('users', 'policy_fund.user_id', 'users.id')
+        .where('policy_id', req.params.id)
+      )
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: error });
+      return;
+    }
+  }
+
 }

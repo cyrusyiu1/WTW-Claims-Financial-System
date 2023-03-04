@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { env } from "../env";
 import Header from './Header';
-import { Badge, Button, ButtonGroup, Col, Nav, Row } from 'react-bootstrap';
+import { Badge, Card, Col, Container, Dropdown, Form, InputGroup, Row, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+// @ts-ignore
+import FeatherIcon from 'feather-icons-react';
 
 const api_server = env.apiOrigin;
 
@@ -37,24 +39,60 @@ export default function PolicyList() {
           </Row>
         </Header.Body>
       </Header>
-      <div style={{ flexFlow: 'wrap', marginLeft: '4%' }}>
-        { allPolicy.map((policy: any, index: number) => (
-            <div key={policy.id}>
-              <div style={{ border: 'solid 2px', marginLeft: '5px', marginRight: '2px', marginBottom: '5px', padding: '10px' }}>
-                <div style={{ textAlign: "left", marginBottom: '5px' }}>
-                  <div>Username: {policy.username}</div>
-                  <div>Policy number: {policy.policy_number}</div>
-                  <div>Policy type: {policy.policy_type}</div>
-                  <div>PolicyTerm: {policy.policy_term}</div>
-                  <div>Coverage amount: {policy.coverage_amount}</div>
-                  <div>Premium: {policy.premium}</div>
-                  <div>Claims Amount: {policy.claims_amount}</div>
-                </div>
-              </div>
-            </div>
-          ))
-        }
-      </div>
+      <Container fluid>
+        <Row className="justify-content-center">
+          <Col xs={12}>
+            <Card>
+              <Card.Header>
+                <InputGroup className="input-group-merge input-group-flush input-group-reverse">
+                  <Form.Control type="search" placeholder="Search" />
+                  <InputGroup.Text>
+                    <FeatherIcon icon="search" size="1em" />
+                  </InputGroup.Text>
+                </InputGroup>
+                <Dropdown align="end">
+                  <Dropdown.Toggle variant="white" size="sm">
+                    Bulk action
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#!">Action</Dropdown.Item>
+                    <Dropdown.Item href="#!">Another action</Dropdown.Item>
+                    <Dropdown.Item href="#!">Something else here</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </Card.Header>
+              <Table size="sm" className="card-table table-nowrap" responsive>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Holder</th>
+                        <th>Description</th>
+                        <th>Blocked</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  {allPolicy.map((row) => {
+                    return (
+                      <tr
+                        key={row.id}>
+                        <td>{row.policy_number}</td>
+                          <td>{row.holder_last_name}</td>
+                          <td>{row.description}</td>
+                          <td>{row.blocked && <Badge bg={`danger-soft`}>Blocked</Badge>}</td>
+                          <td>
+                            <Link className='btn btn-primary mx-2' to={`/policy/${row.id}/fund`}>Fund Management</Link>
+                            <Link className='btn btn-primary mx-2' to={`/policy/${row.id}/claim`}>Claim Management</Link>
+                          </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
     </div>
   )
 }
