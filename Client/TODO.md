@@ -5,7 +5,7 @@
 [x] Add claim form page
 [x] Add claim transaction page
 [x] Add approval page
-[ ] Add email notification
+[x] Add email notification
 [ ] Add sanction result
 [ ] Add audit report
 [ ] Add report page

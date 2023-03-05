@@ -5,6 +5,7 @@ import { Badge, Card, Col, Container, Dropdown, Form, InputGroup, Row, Table } f
 import { Link } from 'react-router-dom';
 // @ts-ignore
 import FeatherIcon from 'feather-icons-react';
+import NameChecked from './NameChecked';
 
 const api_server = env.apiOrigin;
 
@@ -77,7 +78,7 @@ export default function PolicyList() {
                       <tr
                         key={row.id}>
                         <td>{row.policy_number}</td>
-                          <td>{row.holder_last_name}</td>
+                          <td><NameChecked name={row.holder_last_name} /></td>
                           <td>{row.description}</td>
                           <td>{row.blocked && <Badge bg={`danger-soft`}>Blocked</Badge>}</td>
                           <td>

@@ -35,6 +35,7 @@ export let env = {
   smtpUser: optional("SMTP_USER", ''),
   smtpPass: optional("SMTP_PASS", ''),
   frontendUrl: ensure("FRONTEND_URL"),
+  namescaneApi: ensure('NAMESCAN_API'),
   aws: {
     //   accessKeyId: ensure("AWS_ACCESS_KEY_ID"),
     //   secretAccessKey: ensure("AWS_SECRET_ACCESS_KEY"),
