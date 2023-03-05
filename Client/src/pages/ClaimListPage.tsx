@@ -51,7 +51,7 @@ function ClaimListPage() {
     <div className="main-content">
       <Container fluid>
         <Row className="justify-content-center">
-          <Col xs={12} lg={10} xl={8}>
+          <Col xs={12} lg={10} xl={10}>
             <Header className="mt-md-5">
               <Header.Body>
                 <Row className="align-items-center">
@@ -65,7 +65,7 @@ function ClaimListPage() {
               </Header.Body>
             </Header>
           </Col>
-          <Col xs={12} lg={10} xl={8}>
+          <Col xs={12} lg={10} xl={10}>
             <Card>
               <Card.Header>
                 <h5 className="card-header-title">All Claims</h5>
@@ -86,15 +86,15 @@ function ClaimListPage() {
                           </tr>
                         </thead>
                         <tbody>
-                          {fundHistory.map((h, i) => (
+                          {fundHistory.map((claim, i) => (
                             <tr key={i}>
-                              <td>{new Date(h.created_at).toLocaleDateString()}</td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
+                              <td>{new Date(claim.created_at).toLocaleDateString()}</td>
+                              <td>{claim.insurer}</td>
+                              <td>{claim.refer_to_insurer && 'Yes'}</td>
+                              <td>{new Date(claim.date_of_accident).toLocaleDateString()}</td>
+                              <td>{claim.closed ? 'Closed' : 'Open'}</td>
                               <td>
-                                <Link className='btn btn-primary mx-2' to={`/claim/${h.id}/finance`}>Finance Section</Link>
+                                <Link className='btn btn-primary mx-2' to={`/claim/${claim.id}/finance`}>Finance Section</Link>
                               </td>
                             </tr>
                           ))}

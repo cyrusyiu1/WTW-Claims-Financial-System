@@ -7,6 +7,7 @@ import CurrencyFormat from 'react-currency-format';
 import Header from '../components/Header';
 import { env } from '../env';
 import { formatter } from '../utils';
+import CurrencyControl from '../components/CurrencyControl';
 
 function FundPage() {
   const { register, handleSubmit, control } = useForm();
@@ -93,23 +94,9 @@ function FundPage() {
                   </Row>
                   <Row className="align-items-center justify-content-center my-4">
                     <Col xs="auto">
-                      <Controller
+                      <CurrencyControl
                         control={control}
                         name="amount"
-                        render={({
-                          field: { onChange, onBlur, value, name, ref },
-                          fieldState: { invalid, isTouched, isDirty, error },
-                          formState,
-                        }) => (
-                          <CurrencyFormat
-                            thousandSeparator={true}
-                            prefix={'$'}
-                            customInput={Form.Control}
-                            onBlur={onBlur} // notify when input is touched
-                            onValueChange={(values) => onChange(values.value)} // send value to hook form
-                            value={value}
-                          />
-                        )}
                       />
                     </Col>
                     <Col xs="auto">

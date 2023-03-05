@@ -46,7 +46,7 @@ export default function ClaimPage() {
     <div className="main-content">
       <Container fluid>
         <Row className="justify-content-center">
-          <Col xs={12} lg={10} xl={8}>
+          <Col xs={12} lg={10} xl={10}>
             <Header className="mt-md-5">
               <Header.Body>
                 <Row className="align-items-center">
