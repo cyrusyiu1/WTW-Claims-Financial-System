@@ -6,7 +6,7 @@
 [x] Add claim transaction page
 [x] Add approval page
 [x] Add email notification
-[ ] Add sanction result
+[x] Add sanction result
 [ ] Add audit report
 [ ] Add report page
 [x] Change the avatar
