@@ -14,6 +14,8 @@ import { useSelector } from 'react-redux';
 import { IRootState } from './redux/state';
 import Sidebar from './components/Sidebar';
 import FundPage from './pages/FundPage';
+import ClaimListPage from './pages/ClaimListPage';
+import ClaimPage from './pages/ClaimPage';
 
 function App() {
   const isAuthenticated = useSelector(
@@ -29,6 +31,8 @@ function App() {
             <Route path="/register" component={RegisterPage} />
             <Route path="/admin" component={AdminPage} />
             <Route path="/policy/:id/fund" component={FundPage} />
+            <Route path="/policy/:id/claim/new" component={ClaimPage} />
+            <Route path="/policy/:id/claim" component={ClaimListPage} />
             <Route path="/policy/new" component={PolicyPage} />
             <Route path="/policy" component={PolicyListPage} />
           </Switch>

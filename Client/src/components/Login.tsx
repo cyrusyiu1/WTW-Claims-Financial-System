@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { env } from "../env";
 import { loginSuccess, logoutAction } from '../redux/auth/action';
 import { IRootState } from '../redux/state';
-import style from '../style/login.module.css'
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 // @ts-ignore
 import FeatherIcon from 'feather-icons-react';

@@ -2,7 +2,6 @@ import React, { Children, FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import Icon from './Icon';
 import Avatar from './Avatar';
-import style from '../style/sidebar.module.css'
 import { Collapse, Container, Dropdown, Form, InputGroup, Nav, Navbar } from 'react-bootstrap';
 // @ts-ignore
 import FeatherIcon from 'feather-icons-react';
@@ -38,9 +37,6 @@ export default function Sidebar() {
                 </Nav.Link>
                 <Nav.Link as={Link} to="/claim" role="button">
                   Claims Management
-                </Nav.Link>
-                <Nav.Link as={Link} to="/fund" role="button">
-                  Fund Management
                 </Nav.Link>
                 <Nav.Link as={Link} to="/payee" role="button">
                   Payees Management

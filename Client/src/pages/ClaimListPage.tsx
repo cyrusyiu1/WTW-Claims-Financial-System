@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { Button, Card, Col, Container, Row, Form } from 'react-bootstrap';
 import { Controller, useForm } from 'react-hook-form';
-import { useRouteMatch } from 'react-router-dom';
+import { Link, useRouteMatch } from 'react-router-dom';
 import CurrencyFormat from 'react-currency-format';
 
 import Header from '../components/Header';
 import { env } from '../env';
 import { formatter } from '../utils';
 
-function FundPage() {
+function ClaimListPage() {
   const { register, handleSubmit, control } = useForm();
   const id = useRouteMatch<{ id: string }>().params.id;
   const [policy, setPolicy] = React.useState<any>(null);
@@ -19,7 +19,7 @@ function FundPage() {
     setReloadTrigger(reloadTrigger => !reloadTrigger);
   }, [setReloadTrigger]);
 
-  // get policy information
+  // get fund information
   useEffect(() => {
     async function main() {
       const res = await fetch(`${env.apiOrigin}/policy/${id}`, {
@@ -36,7 +36,7 @@ function FundPage() {
   // get fund history with location params id
   useEffect(() => {
     async function main() {
-      const res = await fetch(`${env.apiOrigin}/policy/${id}/fund`, {
+      const res = await fetch(`${env.apiOrigin}/policy/${id}/claim`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -47,15 +47,6 @@ function FundPage() {
     main();
   }, [reloadTrigger, id]);
 
-  // get fund balance with location params id
-  const fundBalance = useMemo(() => {
-    let balance = 0;
-    fundHistory.forEach(h => {
-      balance += h.amount;
-    })
-    return balance;
-  }, [fundHistory]);
-
   return (
     <div className="main-content">
       <Container fluid>
@@ -65,65 +56,19 @@ function FundPage() {
               <Header.Body>
                 <Row className="align-items-center">
                   <Col>
-                    <Header.Title className="text-truncate">Fund Management - #{policy?.policy_number}</Header.Title>
+                    <Header.Title className="text-truncate">Claim Management - #{policy?.policy_number}</Header.Title>
+                  </Col>
+                  <Col xs="auto">
+                    <Link className="ms-2 btn-primary btn" to={`/policy/${id}/claim/new`}>Add Claim</Link>
                   </Col>
                 </Row>
               </Header.Body>
             </Header>
-            <form onSubmit={handleSubmit(async (data: any) => {
-              await fetch(`${env.apiOrigin}/policy/${id}/fund`, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify({
-                  fund: data.amount * 100
-                })
-              });
-              reload();
-            })}>
-              <Card>
-                <Card.Body>
-                  <Row className="align-items-center">
-                    <Col>
-                      <h6 className="text-uppercase text-muted mb-2">Current balance</h6>
-                      <span className="h2 mb-0">${formatter.format(fundBalance / 100)}</span>
-                    </Col>
-                  </Row>
-                  <Row className="align-items-center justify-content-center my-4">
-                    <Col xs="auto">
-                      <Controller
-                        control={control}
-                        name="amount"
-                        render={({
-                          field: { onChange, onBlur, value, name, ref },
-                          fieldState: { invalid, isTouched, isDirty, error },
-                          formState,
-                        }) => (
-                          <CurrencyFormat
-                            thousandSeparator={true}
-                            prefix={'$'}
-                            customInput={Form.Control}
-                            onBlur={onBlur} // notify when input is touched
-                            onValueChange={(values) => onChange(values.value)} // send value to hook form
-                            value={value}
-                          />
-                        )}
-                      />
-                    </Col>
-                    <Col xs="auto">
-                      <Button type="submit" size="sm">Top Up Amount</Button>
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-            </form>
           </Col>
           <Col xs={12} lg={10} xl={8}>
             <Card>
               <Card.Header>
-                <h5 className="card-header-title">Fund History</h5>
+                <h5 className="card-header-title">All Claims</h5>
               </Card.Header>
               {fundHistory.length > 0 && (
                 <Card.Body>
@@ -132,17 +77,25 @@ function FundPage() {
                       <table className="table table-sm table-nowrap card-table">
                         <thead>
                           <tr>
-                            <th>Date</th>
-                            <th>Amount</th>
-                            <th>User</th>
+                            <th>#</th>
+                            <th>Insurer</th>
+                            <th>Refer to Insurer</th>
+                            <th>Date Of Accident</th>
+                            <th>Status</th>
+                            <th>Actions</th>
                           </tr>
                         </thead>
                         <tbody>
                           {fundHistory.map((h, i) => (
                             <tr key={i}>
                               <td>{new Date(h.created_at).toLocaleDateString()}</td>
-                              <td>${formatter.format(h.amount / 100)}</td>
-                              <td>{h.user}</td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td>
+                                <Link className='btn btn-primary mx-2' to={`/claim/${h.id}/finance`}>Finance Section</Link>
+                              </td>
                             </tr>
                           ))}
                         </tbody>
@@ -155,7 +108,7 @@ function FundPage() {
                 <Card.Body>
                   <Row>
                     <Col>
-                      <p className="text-muted">No history found.</p>
+                      <p className="text-muted">No claim found.</p>
                     </Col>
                   </Row>
                 </Card.Body>
@@ -168,4 +121,4 @@ function FundPage() {
   )
 }
 
-export default FundPage
+export default ClaimListPage

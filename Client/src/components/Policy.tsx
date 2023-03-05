@@ -11,10 +11,8 @@ export default function Policy() {
   const { register, handleSubmit } = useForm();
   let history = useHistory();
 
-  const api_server = env.apiOrigin;
-
   const submit = async (data: any) => {
-    await fetch(`${api_server}/policy`, {
+    await fetch(`${env.apiOrigin}/policy`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

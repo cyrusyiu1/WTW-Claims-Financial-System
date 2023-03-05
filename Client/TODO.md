@@ -2,7 +2,7 @@
 [x] Remove register/admin control page
 [x] Fix create policy page -> form
 [x] Add fund management to policy page (transactional)
-[ ] Add claim page
+[ ] Add claim form page
 [ ] Add claim transaction page
 [ ] Add approval page
 [ ] Add payment page
