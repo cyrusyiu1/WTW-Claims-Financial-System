@@ -17,6 +17,7 @@ import FundPage from './pages/FundPage';
 import ClaimListPage from './pages/ClaimListPage';
 import ClaimPage from './pages/ClaimPage';
 import ClaimFinancePage from './pages/ClaimFinancePage';
+import ApprovalListPage from './pages/ApprovalListPage';
 
 function App() {
   const isAuthenticated = useSelector(
@@ -31,6 +32,7 @@ function App() {
             <Route path="/" exact={true} component={Home} />
             <Route path="/register" component={RegisterPage} />
             <Route path="/admin" component={AdminPage} />
+            <Route path="/approval" component={ApprovalListPage} />
             <Route path="/claim/:id/finance" component={ClaimFinancePage} />
             <Route path="/policy/:id/fund" component={FundPage} />
             <Route path="/policy/:id/claim/new" component={ClaimPage} />

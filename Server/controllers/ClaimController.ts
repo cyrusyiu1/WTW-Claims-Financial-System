@@ -52,6 +52,24 @@ export class ClaimController {
     }
   }
 
+  pendingApproval = async (req: Request, res: Response) => {
+    const pendings = await this.knex("claim_finance")
+      .select(
+        'claim.*',
+        'policy.policy_number as policy_number',
+        'policy.description as description',
+        this.knex.raw('count(*) filter (where approved is null) as pending')
+      )
+      .join('claim', 'claim.id', 'claim_finance.claim_id')
+      .join('policy', 'policy.id', 'claim.policy_id')
+      .orWhere(where => {
+        where.whereNull("approved").orWhere("approved", true);
+      })
+      .having(this.knex.raw('count(*) filter (where approved is null) > 0'))
+      .groupBy('claim.id', 'policy.id');
+    res.send(pendings);
+  }
+
   getClaim = async (req: Request, res: Response) => {
     const { id } = req.params;
     const claim = await this.knex("claim")
@@ -87,13 +105,11 @@ export class ClaimController {
       .select(
         'claim_finance.item_id',
         'claim_finance.type',
-        this.knex.raw('SUM(claim_finance.amount) AS amount'),
+        this.knex.raw('SUM(claim_finance.amount) filter (where approved is null or approved = true) AS pending_amount'),
+        this.knex.raw('SUM(claim_finance.amount) filter (where approved = true) AS amount'),
         this.knex.raw('count(*) filter (where approved is null) as pending')
       )
       .where({ claim_id: claim.id })
-      .orWhere(where => {
-        where.whereNull("approved").orWhere("approved", true);
-      })
       .groupBy('item_id', 'type');
     res.send(finance);
   }
@@ -207,6 +223,40 @@ export class ClaimController {
 
   // approve transaction
   approveTransactions = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const claim = await this.knex("claim").where({ id }).first();
+    if (!claim) {
+      res.status(404).send("Claim not found");
+      return;
+    }
 
+    if (req.user?.id == null) {
+      res.status(401).send("Unauthorized");
+      return;
+    }
+
+    const finance = await this.knex("claim_finance")
+      .select(
+        'claim_finance.id',
+        'claim_finance.item_id',
+        'claim_finance.type',
+      )
+      .where({ claim_id: claim.id })
+      .whereNull('approved');
+
+    for (const financeItem of finance) {
+      if (req.body.approve[financeItem.item_id]) {
+        await this.knex("claim_finance")
+          .where({ id: financeItem.id })
+          .update({
+            approved: req.body.decision === 'approve' ? true : false,
+            approval_time: this.knex.fn.now(),
+            approver_id: req.user.id,
+            remark: req.body.remark
+          });
+      }
+    }
+
+    res.send({'result': 'ok'});
   }
 }

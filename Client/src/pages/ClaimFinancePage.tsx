@@ -46,7 +46,7 @@ function ClaimFinancePage() {
     }
     main();
   }, [id, setLimits, reload]);
-  
+
   useEffect(() => {
     async function main() {
       const res = await fetch(`${env.apiOrigin}/claim/${id}/finance`, {
@@ -77,21 +77,111 @@ function ClaimFinancePage() {
     return amounts;
   }, [claimFinance]);
 
-  const locked = useMemo(() => {
-    const locked: any = {
+
+  const pendingAmounts = useMemo(() => {
+    const amounts = {
+      reserve: {} as any,
+      payment: {} as any,
+      recovery: {} as any,
     };
     if (claimFinance == null) {
-      return locked;
+      return amounts;
     }
     for (const item of claimFinanceItems) {
-      locked[item.id] = claimFinance.findIndex((x: any) => x.item_id === item.id && parseInt(x.pending) > 0) > -1;
+      amounts['reserve'][item.id] = claimFinance.find((x: any) => x.item_id === item.id && x.type === 'reserve')?.pending_amount || 0;
+      amounts['payment'][item.id] = claimFinance.find((x: any) => x.item_id === item.id && x.type === 'payment')?.pending_amount || 0;
+      amounts['recovery'][item.id] = claimFinance.find((x: any) => x.item_id === item.id && x.type === 'recovery')?.pending_amount || 0;
     }
-    return locked;
+    return amounts;
   }, [claimFinance]);
-  
+
+  const [hasLocked, locked] = useMemo(() => {
+    const locked: any = {
+    };
+    let hasLocked = false;
+    if (claimFinance == null) {
+      return [hasLocked, locked];
+    }
+    for (const item of claimFinanceItems) {
+      let isLocked = claimFinance.findIndex((x: any) => x.item_id === item.id && parseInt(x.pending) > 0) > -1;
+      if (isLocked) {
+        hasLocked = true;
+      }
+      locked[item.id] = isLocked
+    }
+    return [hasLocked, locked];
+  }, [claimFinance]);
+
+  const [canApprove, apporvable] = useMemo(() => {
+    let pendingApprovalAmount = 0;
+    let pendingApprovalExpense = 0;
+    let canApprove = false;
+
+    const apporvable: any = {
+    };
+
+    if (claimFinance == null) {
+      return [canApprove, apporvable];
+    }
+
+    if (limits == null) {
+      return [canApprove, apporvable];
+    }
+
+    for (const finance of claimFinance) {
+      pendingApprovalAmount += parseInt(finance.pending_amount);
+      const financeItem = claimFinanceItems.find((financeItem) => financeItem.id === finance.item_id);
+      if (financeItem?.subgroup === 'expense') {
+        pendingApprovalExpense += parseInt(finance.pending_amount);
+      }
+    }
+
+    for (const item of claimFinanceItems) {
+      if (pendingApprovalAmount < limits.per_claim_limit || limits.per_claim_limit === 0) {
+        if (item.subgroup === 'expense') {
+          if (pendingApprovalExpense < limits.panel_expense_limit || limits.panel_expense_limit === 0) {
+            apporvable[item.id] = true
+            canApprove = true
+          }
+        } else {
+          apporvable[item.id] = true
+          canApprove = true
+        }
+      }
+    }
+    return [canApprove, apporvable];
+  }, [claimFinance, limits]);
+
+  console.log(canApprove, apporvable)
+
   const update = watch('update');
 
   const newAmounts = watch(`amount`);
+
+  async function submit(data: any) {
+    if (data.update === 'approve') {
+      await fetch(`${env.apiOrigin}/claim/${id}/approve`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(data),
+      });
+    } else {
+      await fetch(`${env.apiOrigin}/claim/${id}/finance`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(data),
+      });
+    }
+
+    setReload(r => r + 1)
+    reset();
+  }
 
   return (
     <div className="main-content">
@@ -109,19 +199,7 @@ function ClaimFinancePage() {
             </Header>
           </Col>
           <Col xs={12} lg={10} xl={8}>
-            <form onSubmit={handleSubmit(async (data: any) => {
-              await fetch(`${env.apiOrigin}/claim/${id}/finance`, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify(data),
-              });
-
-              setReload(r => r + 1)
-              reset();
-            })}>
+            <form onSubmit={handleSubmit(submit)}>
               <Card>
                 <Card.Body>
                   <Row>
@@ -129,6 +207,7 @@ function ClaimFinancePage() {
                       <table className="table table-sm table-nowrap card-table">
                         <thead>
                           <tr>
+                            {canApprove && hasLocked && <th><Form.Check type='radio' {...register('update')} value="approve" label="Approve" /></th>}
                             <th>Item</th>
                             <th><Form.Check type='radio' {...register('update')} value="reserve" label="Reserve" /></th>
                             <th><Form.Check type='radio' {...register('update')} value="payment" label="Payment" /></th>
@@ -138,9 +217,18 @@ function ClaimFinancePage() {
                         <tbody>
                           {claimFinanceItems.map((item, index) => {
                             const oldReserve = parseInt(amounts.reserve?.[item.id] ?? 0) - parseInt(amounts.payment?.[item.id] ?? 0) + parseInt(amounts.recovery?.[item.id] ?? 0);
+                            const pendingApprovalReserve = parseInt(pendingAmounts.reserve?.[item.id] ?? 0) - parseInt(pendingAmounts.payment?.[item.id] ?? 0) + parseInt(pendingAmounts.recovery?.[item.id] ?? 0);
+                            
                             const newAmount = newAmounts?.[item.id]
                             return (
                               <tr className={locked[item.id] ? 'bg-warning' : ''}>
+                                {canApprove && hasLocked &&
+                                  ((update === 'approve' && apporvable[item.id] && locked[item.id]) ?
+                                  <td>
+                                    <Form.Check type='checkbox' {...register(`approve.${item.id}`)} value={item.id} />
+                                  </td> :
+                                  <td></td>)
+                                }
                                 <td>{item.name}</td>
                                 <td>
                                   <p>
@@ -163,6 +251,14 @@ function ClaimFinancePage() {
                                       )}
                                     </>
                                     }
+                                    {oldReserve - pendingApprovalReserve != 0 && <>
+                                      {oldReserve > pendingApprovalReserve ? (
+                                        <Badge bg="danger" className="ml-2">- ${oldReserve - pendingApprovalReserve}</Badge>
+                                      ) : (
+                                        <Badge bg="success" className="ml-2">+ ${pendingApprovalReserve - oldReserve}</Badge>
+                                      )}
+                                    </>
+                                    }
                                   </p>
                                   {update === 'reserve' && !locked[item.id] && <>
                                     <CurrencyControl
@@ -178,6 +274,14 @@ function ClaimFinancePage() {
                                     {update === 'payment' && <>
                                       {newAmount && newAmount > 0 && (
                                         <Badge bg="success" className="ml-2">+ ${newAmount}</Badge>
+                                      )}
+                                    </>
+                                    }
+                                    {amounts.payment?.[item.id] - pendingAmounts.payment?.[item.id] != 0 && <>
+                                      {amounts.payment?.[item.id] > pendingAmounts.payment?.[item.id] ? (
+                                        <Badge bg="danger" className="ml-2">- ${amounts.payment?.[item.id] - pendingAmounts.payment?.[item.id]}</Badge>
+                                      ) : (
+                                        <Badge bg="success" className="ml-2">+ ${pendingAmounts.payment?.[item.id] - amounts.payment?.[item.id]}</Badge>
                                       )}
                                     </>
                                     }
@@ -207,6 +311,14 @@ function ClaimFinancePage() {
                                     />
                                   </>
                                   }
+                                  {amounts.recovery?.[item.id] - pendingAmounts.recovery?.[item.id] != 0 && <>
+                                    {amounts.recovery?.[item.id] > pendingAmounts.recovery?.[item.id] ? (
+                                      <Badge bg="danger" className="ml-2">- ${amounts.recovery?.[item.id] - pendingAmounts.recovery?.[item.id]}</Badge>
+                                    ) : (
+                                      <Badge bg="success" className="ml-2">+ ${pendingAmounts.recovery?.[item.id] - amounts.recovery?.[item.id]}</Badge>
+                                    )}
+                                  </>
+                                  }
                                 </td>
                               </tr>
                             );
@@ -217,9 +329,21 @@ function ClaimFinancePage() {
                   </Row>
                 </Card.Body>
               </Card>
+              { update === 'approve' ? 
+              <>
+                <div className='my-4 text-center'>
+                  <Form.Label>Remark</Form.Label>
+                  <Form.Control {...register('remark')} />
+                </div> 
+                <div className='my-4 text-center'>
+                  <input className='btn btn-success mx-2' type="button" value="Approve" onClick={handleSubmit((data: any) => submit({...data, decision: 'approve'}))} />
+                  <input className='btn btn-danger mx-2' type="button" value="Reject" onClick={handleSubmit((data: any) => submit({...data, decision: 'reject'}))} />
+                </div> 
+              </> :
               <div className='my-4 text-center'>
-                <input className='btn btn-primary' type="Submit" value="Update" />
-              </div>
+                <input className='btn btn-primary' type="submit" value="Update" />
+              </div> 
+              }
             </form>
           </Col>
         </Row>

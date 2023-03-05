@@ -2,9 +2,11 @@
 [x] Remove register/admin control page
 [x] Fix create policy page -> form
 [x] Add fund management to policy page (transactional)
-[ ] Add claim form page
-[ ] Add claim transaction page
-[ ] Add approval page
-[ ] Add payment page
+[x] Add claim form page
+[x] Add claim transaction page
+[x] Add approval page
+[ ] Add email notification
 [ ] Add sanction result
+[ ] Add audit report
 [ ] Add report page
+[ ] Change the avatar
