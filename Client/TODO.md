@@ -9,4 +9,4 @@
 [ ] Add sanction result
 [ ] Add audit report
 [ ] Add report page
-[ ] Change the avatar
+[x] Change the avatar

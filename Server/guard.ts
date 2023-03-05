@@ -15,7 +15,6 @@ export async function isLoggedIn(
   ) {
   try {
     const token = permit.check(req);
-    console.log(token)
     if (!token) {
       return res.status(200).json({ message: "Permission denied" });
     }
@@ -24,8 +23,6 @@ export async function isLoggedIn(
     const user = await guardService.getUserById(userId);
 
     req.userId = userId;
-
-    console.log({ user });
 
     if (user) {
       req.user = user;

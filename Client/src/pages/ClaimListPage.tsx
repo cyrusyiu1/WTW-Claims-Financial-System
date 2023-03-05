@@ -88,7 +88,7 @@ function ClaimListPage() {
                         <tbody>
                           {fundHistory.map((claim, i) => (
                             <tr key={i}>
-                              <td>{new Date(claim.created_at).toLocaleDateString()}</td>
+                              <td>{claim.claim_financial_number}</td>
                               <td>{claim.insurer}</td>
                               <td>{claim.refer_to_insurer && 'Yes'}</td>
                               <td>{new Date(claim.date_of_accident).toLocaleDateString()}</td>

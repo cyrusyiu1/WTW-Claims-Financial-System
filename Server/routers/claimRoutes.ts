@@ -2,8 +2,9 @@ import express from "express";
 import { ClaimController } from "../controllers/ClaimController";
 import { isLoggedIn } from "../guard";
 import knex from "../knex";
+import { EmailService } from "../services/EmailService";
 
-const claimController = new ClaimController(knex);
+const claimController = new ClaimController(knex, new EmailService());
 
 export const claimRoutes = express.Router();
 

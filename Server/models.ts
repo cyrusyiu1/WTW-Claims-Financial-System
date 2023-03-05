@@ -2,11 +2,13 @@ export interface User {
     id: number;
     username: string;
     password: string;
+    permissionsLevel: number;
   }
 
   interface ReqUser {
     id: number;
     username: string;
+    permissionsLevel: number;
   }
 
   declare global {

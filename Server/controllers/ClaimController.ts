@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
 import { Knex } from "knex";
+import { env } from "../env";
 import { claimFinanceItems } from "../models";
+import { EmailService } from "../services/EmailService";
 
 export class ClaimController {
-  constructor(private knex: Knex) {}
+  constructor(private knex: Knex, private emailService: EmailService) {}
   
   private async getUserLimits(userId: number, claimId: string) {
     const policy = await this.knex("policy")
@@ -129,6 +131,7 @@ export class ClaimController {
 
     const limits = await this.getUserLimits(req.user?.id, id);
     
+    console.log(claim.id);
     const finances = await this.knex("claim_finance")
       .select(
         'claim_finance.item_id',
@@ -137,7 +140,7 @@ export class ClaimController {
         this.knex.raw('count(*) filter (where approved is null) as pending')
       )
       .where({ claim_id: claim.id })
-      .orWhere(where => {
+      .where(where => {
         where.whereNull("approved").orWhere("approved", true);
       })
       .groupBy('item_id', 'type');
@@ -164,10 +167,10 @@ export class ClaimController {
 
     for (const finance of finances) {
       // if (finance.user_id === req.user?.id) {
-        pendingApprovalAmount += finance.amount;
+        pendingApprovalAmount += parseInt(finance.amount + '');
         const financeItem = claimFinanceItems.find((financeItem) => financeItem.id === finance.item_id);
         if (financeItem?.subgroup === 'expense') {
-          pendingApprovalExpense += finance.amount;
+          pendingApprovalExpense += parseInt(finance.amount + '');
         }
       // }
     }
@@ -180,12 +183,15 @@ export class ClaimController {
           return;
         }
         if (financeItem?.subgroup === 'expense') {
-          pendingApprovalExpense += amounts[item];
+          pendingApprovalExpense += parseInt(amounts[item] + '');
         }
-        pendingApprovalAmount += amounts[item];
+        pendingApprovalAmount += parseInt(amounts[item] + '');
       }
     }
 
+    console.log(pendingApprovalAmount, pendingApprovalExpense)
+    let pendingItems = false;
+    
     for (let item = 0; item < amounts.length; item++) {
       if (item && amounts[item]) {
         const financeItem = claimFinanceItems.find((i) => i.id === item);
@@ -204,6 +210,7 @@ export class ClaimController {
             approver_id: null,
             user_id: req.user.id,
           });
+          pendingItems = true;
         } else {
           await this.knex("claim_finance").insert({
             claim_id: claim.id,
@@ -214,6 +221,21 @@ export class ClaimController {
             approver_id: null,
             user_id: req.user.id,
           });
+        }
+      }
+    }
+
+    if (pendingItems) {
+      const approvers = await this.knex("users")
+        .where('permissionsLevel', '>', req.user.permissionsLevel)
+      for (const approver of approvers) {
+        // email them one by one
+        const limits = await this.getUserLimits(approver.id, id);
+        if ((limits.panel_expense_limit === 0 || limits.panel_expense_limit > pendingApprovalExpense)
+          && (limits.per_claim_limit === 0 || limits.per_claim_limit > pendingApprovalAmount)) {
+          this.emailService.sendEmail(approver.email, 'New claim pending approval', `New claim pending approval:
+  
+${env.frontendUrl}/claim/${claim.id}/finance`);
         }
       }
     }

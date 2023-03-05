@@ -96,4 +96,6 @@ export async function seed(knex: Knex): Promise<void> {
       authorityLevel: 0,
     },
   ]);
+
+  await knex.raw("update users set email = CONCAT(username, '@wtwco.com')");
 }

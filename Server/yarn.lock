@@ -113,6 +113,13 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.14.6.tgz#ae1973dd2b1eeb1825695bb11ebfb746d27e3e93"
   integrity sha512-93+VvleD3mXwlLI/xASjw0FzKcwzl3OdTCzm1LaRfqgS21gfFtK3zDXM5Op9TeeMsJVOaJ2VRDpT9q4Y3d0AvA==
 
+"@types/nodemailer@^6.4.7":
+  version "6.4.7"
+  resolved "https://registry.yarnpkg.com/@types/nodemailer/-/nodemailer-6.4.7.tgz#658f4bca47c1a895b1d7e054b3b54030a5e1f5e0"
+  integrity sha512-f5qCBGAn/f0qtRcd4SEn88c8Fp3Swct1731X4ryPKqS61/A3LmmzN8zaEz7hneJvpjFbUUgY7lru/B/7ODTazg==
+  dependencies:
+    "@types/node" "*"
+
 "@types/permit@^0.2.2":
   version "0.2.2"
   resolved "https://registry.npmjs.org/@types/permit/-/permit-0.2.2.tgz"
@@ -713,6 +720,11 @@ negotiator@0.6.3:
   resolved "https://registry.npmjs.org/negotiator/-/negotiator-0.6.3.tgz"
   integrity sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==
 
+nodemailer@^6.9.1:
+  version "6.9.1"
+  resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-6.9.1.tgz#8249d928a43ed85fec17b13d2870c8f758a126ed"
+  integrity sha512-qHw7dOiU5UKNnQpXktdgQ1d3OFgRAekuvbJLcdG5dnEo/GtcTHRYM7+UfJARdOFU9WUQO8OiIamgWPmiSFHYAA==
+
 normalize-path@^3.0.0, normalize-path@~3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/normalize-path/-/normalize-path-3.0.0.tgz"
@@ -1054,26 +1066,7 @@ ts-node-dev@^2.0.0:
     ts-node "^10.4.0"
     tsconfig "^7.0.0"
 
-ts-node@^10.4.0:
-  version "10.9.1"
-  resolved "https://registry.npmjs.org/ts-node/-/ts-node-10.9.1.tgz"
-  integrity sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==
-  dependencies:
-    "@cspotcode/source-map-support" "^0.8.0"
-    "@tsconfig/node10" "^1.0.7"
-    "@tsconfig/node12" "^1.0.7"
-    "@tsconfig/node14" "^1.0.0"
-    "@tsconfig/node16" "^1.0.2"
-    acorn "^8.4.1"
-    acorn-walk "^8.1.1"
-    arg "^4.1.0"
-    create-require "^1.1.0"
-    diff "^4.0.1"
-    make-error "^1.1.1"
-    v8-compile-cache-lib "^3.0.1"
-    yn "3.1.1"
-
-ts-node@^10.9.1:
+ts-node@^10.4.0, ts-node@^10.9.1:
   version "10.9.1"
   resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-10.9.1.tgz#e73de9102958af9e1f0b168a6ff320e25adcff4b"
   integrity sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==
