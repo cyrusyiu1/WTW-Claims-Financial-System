@@ -20,6 +20,8 @@ function ClaimFinancePage() {
   const [claimFinanceHistory,setClaimFinanceHistory] = useState([{id:0,claim_id: 0,item_id: 0, type:'',amount:0}]);
   const [swalProps, setSwalProps] = React.useState<any>({});
   const [reload, setReload] = React.useState(0);
+  const [formattedDate,setFormmattedDate] = React.useState<any>(null)
+
 
   // get policy information
   useEffect(() => {
@@ -68,7 +70,15 @@ function ClaimFinancePage() {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       })
-      const result = await res.json()
+      let result = await res.json()
+      let created_at_list = result.map((item: { created_at: any; }) => item.created_at)
+      created_at_list.forEach((created_at: string | number | Date, index: string | number) => {
+        let date = new Date(created_at);
+        let formatted_date = date.toISOString().replace('T', ' ').slice(0, -5)
+        result[index].created_at = formatted_date;
+      });
+      // let date = new Date(result.created_at)
+      // setFormmattedDate(date.getHours() + ":" + date.getMinutes() + ", "+ date.toDateString())
       setClaimFinanceHistory(result);
       console.log('result',result)
     }
