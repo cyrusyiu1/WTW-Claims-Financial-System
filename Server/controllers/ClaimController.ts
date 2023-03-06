@@ -151,15 +151,17 @@ export class ClaimController {
       .groupBy('item_id', 'type');
 
     const amounts: number[] = [];
-    for (let item = 0; item < req.body.amount.length; item++) {
-      const amountInt = parseInt(req.body.amount[item])
-      if (amountInt && !isNaN(amountInt)) {
-        amounts.push(parseInt(req.body.amount[item]))
-      } else {
-        amounts.push(0)
+    if(req.body.amount){
+      for (let item = 0; item < req.body.amount.length; item++) {
+        const amountInt = parseInt(req.body.amount[item])
+        if (amountInt && !isNaN(amountInt)) {
+          amounts.push(parseInt(req.body.amount[item]))
+        } else {
+          amounts.push(0)
+        }
       }
     }
-  
+    
     for (const finance of finances) {
       if (amounts[finance.item_id] && parseInt(finance.pending) > 0) {
         res.status(400).send("Row " + finance.item_id + " locked");

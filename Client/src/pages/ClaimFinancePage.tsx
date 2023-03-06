@@ -77,8 +77,6 @@ function ClaimFinancePage() {
         let formatted_date = date.toISOString().replace('T', ' ').slice(0, -5)
         result[index].created_at = formatted_date;
       });
-      // let date = new Date(result.created_at)
-      // setFormmattedDate(date.getHours() + ":" + date.getMinutes() + ", "+ date.toDateString())
       setClaimFinanceHistory(result);
       console.log('result',result)
     }
