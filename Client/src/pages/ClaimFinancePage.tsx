@@ -370,7 +370,7 @@ function ClaimFinancePage() {
             </form>
           </Col>
           <Col>
-            <Card>
+            <Card style={{height:'100vh',overflow:'auto'}}>
                 <h4 className="bg-warning py-2">
                   Transaction history
                 </h4>
