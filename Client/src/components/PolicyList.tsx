@@ -11,6 +11,7 @@ const api_server = env.apiOrigin;
 
 export default function PolicyList() {
   const [allPolicy, setAllPolicy] = useState<any[]>([])
+  const [userType,setUserType] =useState('')
 
   const getAllPolicyApi = useCallback(async () => {
     const res = await fetch(`${api_server}/policy`, {
@@ -21,6 +22,22 @@ export default function PolicyList() {
     const result = await res.json()
     setAllPolicy(result)
   }, [setAllPolicy])
+
+  const getuserApi = async () => {
+    const res = await fetch(`${env.apiOrigin}/users/getUserById`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+  const result = await res.json()
+  setUserType(result.userType)
+}
+
+  useEffect(()=>{
+    getuserApi()
+  },[])
 
   useEffect(() => {
     getAllPolicyApi()
@@ -35,7 +52,10 @@ export default function PolicyList() {
               <Header.Title className="text-truncate">Policy List</Header.Title>
             </Col>
             <Col xs="auto">
-              <Link className="ms-2 btn-primary btn" to="/policy/new">Add Policy</Link>
+              {userType !== 'claim'?
+              <Link className="ms-2 btn-primary btn" to="/policy/new">Add Policy</Link>     
+              :''        
+              }
             </Col>
           </Row>
         </Header.Body>
@@ -82,7 +102,10 @@ export default function PolicyList() {
                           <td>{row.description}</td>
                           <td>{row.blocked && <Badge bg={`danger-soft`}>Blocked</Badge>}</td>
                           <td>
+                          {userType !== 'claim'?
                             <Link className='btn btn-primary mx-2' to={`/policy/${row.id}/fund`}>Fund Management</Link>
+                            :''
+                          }
                             <Link className='btn btn-primary mx-2' to={`/policy/${row.id}/claim`}>Claim Management</Link>
                           </td>
                       </tr>

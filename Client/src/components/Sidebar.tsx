@@ -1,4 +1,4 @@
-import React, { Children, FormEvent } from 'react'
+import React, { Children, FormEvent, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Icon from './Icon';
 import Avatar from './Avatar';
@@ -7,15 +7,33 @@ import { Collapse, Container, Dropdown, Form, InputGroup, Nav, Navbar } from 're
 import FeatherIcon from 'feather-icons-react';
 import { logoutAction } from '../redux/auth/action';
 import { useDispatch } from 'react-redux';
+import { env } from "../env";
 
 export default function Sidebar() {
   const dispatch = useDispatch()
+  const [userType,setUserType] =useState('')
 
   const logoutButton = (event: FormEvent) => {
     event.preventDefault();
     localStorage.removeItem('token');
     dispatch(logoutAction())
   }
+
+  const getuserApi = async () => {
+    const res = await fetch(`${env.apiOrigin}/users/getUserById`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+  const result = await res.json()
+  setUserType(result.userType)
+}
+
+  useEffect(()=>{
+    getuserApi()
+  },[])
 
   return (
     <>
@@ -29,9 +47,11 @@ export default function Sidebar() {
             <hr className="navbar-divider" />
             <Nav>
               <Nav.Item>
+              {userType !== 'claim'?
                 <Nav.Link as={Link} to="/approval" role="button">
                   Pending Approval
-                </Nav.Link>
+                </Nav.Link> : ''
+                }
                 <Nav.Link as={Link} to="/policy" role="button">
                   Policy Management
                 </Nav.Link>
