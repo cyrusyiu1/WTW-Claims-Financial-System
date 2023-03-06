@@ -54,6 +54,11 @@ export class ClaimController {
     }
   }
 
+  getClaimFinanceHistory = async (req: Request, res: Response)=>{
+    const pendings = await this.knex("claim_finance").select('*')
+    res.send(pendings)
+  }
+
   pendingApproval = async (req: Request, res: Response) => {
     const pendings = await this.knex("claim_finance")
       .select(

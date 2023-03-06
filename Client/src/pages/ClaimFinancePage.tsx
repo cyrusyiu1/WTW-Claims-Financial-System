@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Header from '../components/Header';
 import { Card, Badge, Button, ButtonGroup, Container, Col, Form, Table, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
@@ -17,6 +17,7 @@ function ClaimFinancePage() {
   const [limits, setLimits] = React.useState<any>(null);
   const [claim, setClaim] = React.useState<any>(null);
   const [claimFinance, setClaimFinance] = React.useState<any>(null);
+  const [claimFinanceHistory,setClaimFinanceHistory] = useState([{id:0,claim_id: 0,item_id: 0, type:'',amount:0}]);
   const [swalProps, setSwalProps] = React.useState<any>({});
   const [reload, setReload] = React.useState(0);
 
@@ -59,6 +60,20 @@ function ClaimFinancePage() {
     }
     main();
   }, [id, setClaimFinance, reload]);
+
+  useEffect (()=>{
+    async function main() {
+      const res = await fetch(`${env.apiOrigin}/claim/${id}/claimFinanceHistory`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      const result = await res.json()
+      setClaimFinanceHistory(result);
+      console.log('result',result)
+    }
+    main();
+  },[id, setClaimFinanceHistory, reload])
 
   const amounts = useMemo(() => {
     const amounts = {
@@ -345,6 +360,37 @@ function ClaimFinancePage() {
               </div> 
               }
             </form>
+          </Col>
+          <Col>
+            <Card>
+                <h4 className="bg-warning py-2">
+                  Transaction history
+                </h4>
+                 {claimFinanceHistory.map((history:any)=>(
+                   <>
+                   <Col>
+                    <Row>
+                    <tbody style={{borderBottom:'solid 1px',borderColor:'gainsboro'}}>
+                      <table>
+                        <tr>
+                          <td>Amount : </td>
+                          <td>{history.amount}</td>
+                        </tr>
+                        <tr>
+                          <td>Type : </td>
+                          <td>{history.type}</td>
+                        </tr>
+                        <tr>
+                          <td>Date : </td>
+                          <td>{history.created_at}</td>
+                        </tr>
+                      </table>
+                      </tbody>
+                    </Row>
+                   </Col> 
+                   </>
+                 ))}
+              </Card>
           </Col>
         </Row>
       </Container>

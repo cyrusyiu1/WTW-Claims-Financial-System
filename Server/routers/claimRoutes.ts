@@ -14,3 +14,4 @@ claimRoutes.get("/:id/limits", isLoggedIn, claimController.getCurrentUserLimits)
 claimRoutes.get("/:id/finance", isLoggedIn, claimController.getFinanceTransactions);
 claimRoutes.post("/:id/finance", isLoggedIn, claimController.addFinanceTransactions);
 claimRoutes.put("/:id/approve", isLoggedIn, claimController.approveTransactions);
+claimRoutes.get("/:id/claimFinanceHistory",isLoggedIn,claimController.getClaimFinanceHistory)
