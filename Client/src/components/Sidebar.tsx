@@ -47,7 +47,7 @@ export default function Sidebar() {
             <hr className="navbar-divider" />
             <Nav>
               <Nav.Item>
-              {userType !== 'claim'?
+              {userType === 'superadmin'?
                 <Nav.Link as={Link} to="/approval" role="button">
                   Pending Approval
                 </Nav.Link> : ''

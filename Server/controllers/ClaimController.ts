@@ -55,7 +55,7 @@ export class ClaimController {
   }
 
   getClaimFinanceHistory = async (req: Request, res: Response)=>{
-    const pendings = await this.knex("claim_finance").select('*')
+    const pendings = await this.knex("claim_finance").select('*').where({user_id:req.user?.id})
     res.send(pendings)
   }
 

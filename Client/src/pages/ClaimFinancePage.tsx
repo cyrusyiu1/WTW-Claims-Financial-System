@@ -77,6 +77,7 @@ function ClaimFinancePage() {
         let formatted_date = date.toISOString().replace('T', ' ').slice(0, -5)
         result[index].created_at = formatted_date;
       });
+      result.reverse()
       setClaimFinanceHistory(result);
       console.log('result',result)
     }
@@ -369,8 +370,8 @@ function ClaimFinancePage() {
               }
             </form>
           </Col>
-          <Col>
-            <Card style={{height:'100vh',overflow:'auto'}}>
+          <Col style={{height:'100vh',overflow:'auto'}}>
+            <Card >
                 <h4 className="bg-warning py-2">
                   Transaction history
                 </h4>
